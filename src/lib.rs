@@ -85,7 +85,7 @@ pub async fn get_client() -> Result<Arc<RootProvider<PubSubFrontend>>, anyhow::E
 pub fn new_evm(fork_db: ForkDB, block: Block) -> Evm<'static, (), ForkDB> {
     let mut evm = Evm::builder().with_db(fork_db).build();
 
-    evm.block_mut().number = U256::from(block.header.number.unwrap());
+    evm.block_mut().number = U256::from(block.header.number);
     evm.block_mut().timestamp = U256::from(block.header.timestamp);
     evm.block_mut().coinbase = block.header.miner;
 

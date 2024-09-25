@@ -42,8 +42,8 @@ async fn main() -> Result<(), anyhow::Error> {
 
     // query the balance of Alice
 
-    let (balance, _) = evm.context.balance(alice.address).unwrap();
-    println!("Alice balance: {} ETH", format_ether(balance));
+    let state = evm.context.balance(alice.address).unwrap();
+    println!("Alice balance: {} ETH", format_ether(state.data));
 
     // transfer 10 ETH from Alice to Bob
     let amount = parse_ether("10")?;
@@ -58,11 +58,11 @@ async fn main() -> Result<(), anyhow::Error> {
     evm.transact_commit()?;
 
     // query the balance of Bob
-    let (balance, _) = evm.context.balance(bob.address).unwrap();
-    ensure!(balance >= amount, "Bob's balance is less than 10 ETH, Bob not happy!");
+    let state = evm.context.balance(bob.address).unwrap();
+    ensure!(state.data >= amount, "Bob's balance is less than 10 ETH, Bob not happy!");
 
     let received = format!("Bob just received: {:.4} ETH!", format_ether(amount));
-    let bob_balance = format!("Bob's balance: {:.4} ETH", format_ether(balance));
+    let bob_balance = format!("Bob's balance: {:.4} ETH", format_ether(state.data));
     let bob_happy = "Bob is happy!";
     let msg = format!("\n{}\n{}\n{}", received, bob_balance, bob_happy);
 

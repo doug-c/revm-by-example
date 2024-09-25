@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-alloy = { version = "0.1", features = ["full"] }
+alloy = { version = "0.3", features = ["full"] }
 
-revm = { version = "11.0.0", features = [
+revm = { version = "14.0.2", features = [
     "serde",
     "std",
     "optional_block_gas_limit",
