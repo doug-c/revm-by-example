@@ -14,6 +14,7 @@ use revm::primitives::{ Bytes, TransactTo };
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
+   
     let client = get_client().await?;
 
     let latest_block = client.get_block_number().await?;
@@ -25,7 +26,7 @@ async fn main() -> Result<(), anyhow::Error> {
     let mut stream = sub.into_stream();
 
     let pools = get_pools();
-
+    dbg!(&pools);
     // in a real application you should update the block_id to the latest block
     let fork_factory = ForkFactory::new_sandbox_factory(
         client.clone(),
@@ -33,11 +34,9 @@ async fn main() -> Result<(), anyhow::Error> {
         Some(block_id)
     );
     let fork_db = fork_factory.new_sandbox_fork();
-
+    dbg!(&fork_db);
     while let Some(tx) = stream.next().await {
         {
-            
-            
             let mut evm = new_evm(fork_db.clone(), block.clone().unwrap());
 
             evm.tx_mut().caller = tx.from.0.into();
@@ -53,7 +52,7 @@ async fn main() -> Result<(), anyhow::Error> {
                 .filter(|acc| pools.contains(acc))
                 .map(|acc| *acc)
                 .collect();
-           
+            dbg!(&touched_pools);
             if !touched_pools.is_empty() {
                 let output = format!(
                     "Tx Touched pools: {:?}
